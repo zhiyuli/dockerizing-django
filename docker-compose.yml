@@ -32,7 +32,7 @@ services:
       - /home/drew/dockerizing-django/web:/code
     env_file: .env
     environment:
-      DEBUG: 'true'
+      DEBUG: 'false'
 
     command: /usr/local/bin/gunicorn docker_django.wsgi:application -w 2 -b :8000
     #command: python manage.py runserver 0.0.0.0:8000
@@ -47,8 +47,9 @@ services:
     build: ./nginx/
     ports:
       - "80:80"
-#    volumes:
+    volumes:
 #      - /www/static
+      - /home/drew/dockerizing-django/nginx/sites-enabled/:/etc/nginx/sites-enabled
     volumes_from:
       - my_web
   #  links:
