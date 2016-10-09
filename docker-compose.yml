@@ -1,43 +1,58 @@
-web:
-  restart: always
-  build: ./web
-  expose:
-    - "8000"
-  links:
-    - postgres:postgres
-    - redis:redis
-  volumes:
-    - /usr/src/app
-    - /usr/src/app/static
-  env_file: .env
-  environment:
-    DEBUG: 'true'
-  command: /usr/local/bin/gunicorn docker_django.wsgi:application -w 2 -b :8000
+version: '2'
+services:
+  my_postgres:
+    restart: always
+    image: postgres:latest
+  #  ports:
+  #    - "5432:5432"
+#    volumes:
+#      - pgdata:/var/lib/postgresql/data/
 
-nginx:
-  restart: always
-  build: ./nginx/
-  ports:
-    - "80:80"
-  volumes:
-    - /www/static
-  volumes_from:
-    - web
-  links:
-    - web:web
+  my_redis:
+    restart: always
+    image: redis:latest
+  #  ports:
+  #    - "6379:6379"
+#    volumes:
+#      - redisdata:/data
 
-postgres:
-  restart: always
-  image: postgres:latest
-  ports:
-    - "5432:5432"
-  volumes:
-    - pgdata:/var/lib/postgresql/data/
+  my_web:
+    restart: always
+    build: ./web
+  #  expose:
+  #    - "8000"
+  #  links:
+  #    - postgres:postgres
+  #    - redis:redis
+    ports:
+      - 8002:8000
+    volumes:
+  #    - /usr/src/app
+  #    - /usr/src/app/static
+      - /home/drew/dockerizing-django/web:/code
+    env_file: .env
+    environment:
+      DEBUG: 'true'
 
-redis:
-  restart: always
-  image: redis:latest
-  ports:
-    - "6379:6379"
-  volumes:
-    - redisdata:/data
+    command: /usr/local/bin/gunicorn docker_django.wsgi:application -w 2 -b :8000
+    #command: python manage.py runserver 0.0.0.0:8000
+
+    depends_on:
+      - my_postgres
+      - my_redis
+
+
+  my_nginx:
+    restart: always
+    build: ./nginx/
+    ports:
+      - "80:80"
+#    volumes:
+#      - /www/static
+    volumes_from:
+      - my_web
+  #  links:
+  #    - web:web
+    depends_on:
+      - my_web
+
