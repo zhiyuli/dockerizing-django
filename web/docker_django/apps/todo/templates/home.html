@@ -1,12 +1,23 @@
 {% extends "_base.html" %}
 
-
+{% load static %}
 {% block content %}
 
 <div class="text-center">
   {% load staticfiles %}
-  <br>
+  static file from external web
+    <br>
   <img src="http://media.django.es.s3.amazonaws.com/nuevo/images/djangopony.png">
+  <br>
+
+    static files from app folder
+    <br>
+  <img src="{% static "todo/google.png" %}">
+  <br>
+
+    static files not from app folder
+    <br>
+  <img src="{% static "byu.png" %}">
   <br>
   <p>This page has been viewed <strong>{{counter}}</strong> times!</p>
 </div>

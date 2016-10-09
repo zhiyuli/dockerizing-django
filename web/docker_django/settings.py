@@ -23,7 +23,7 @@ SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True if os.getenv('DEBUG') == 'true' else False
+DEBUG = True if os.getenv('DEBUG').lower() == 'true' else False
 
 ALLOWED_HOSTS = ['*']
 
@@ -112,10 +112,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
-# STATICFILES_DIRS = (
-#     os.path.join(BASE_DIR, 'static'),
-# )
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'other_static'),
+)
 # print(STATICFILES_DIRS)
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-print("****************************************************************************************************")
-print(STATIC_ROOT)

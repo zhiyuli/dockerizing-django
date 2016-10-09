@@ -1,0 +1,1 @@
+This folder contains static files that are NOT tied to any specific app.
